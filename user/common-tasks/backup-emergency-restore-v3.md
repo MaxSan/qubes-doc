@@ -95,6 +95,14 @@ any GNU/Linux system with the following procedure.
 
         [user@restore vm1]$ cat private.img.??? | openssl enc -d -pass pass:your_passphrase -aes-256-cbc -out private.img.dec
 
+    **Note:** Depending on the version of openssl which the backup was created,
+    the message digest may be different. This will cause a EVP_DecryptFinal_ex:
+    bad decrypt. Adding the flag -md md5 can fix the final envelope decrypt.
+    
+    **Note:** If you have a failed attempt at the decrypt, fully remove the
+    private.img.dec file as it will cause an infinate loop of file reading and
+    decrypting, draining the target drive of space completely.
+    
     **Note:** If your backup was encrypted with a cipher algorithm other than
     `aes-256-cbc`, you must substitute the correct cipher command. This
     information is contained in the `backup-header` file (see step 3). A
